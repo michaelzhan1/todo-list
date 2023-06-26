@@ -1,7 +1,50 @@
-h1 {
-    margin: 15px;
+/* Stylesheet for todo app */
+/* Begin general styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body > form {
-    margin: 15px;
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    background-color: #f4f4f4;
+}
+/* End general styles */
+
+/* Begin header styles */
+h1 {
+    margin-top: 15px
+}
+/* End header styles */
+
+/* Begin form styles */
+#taskList button{
+    float: right;
+}
+
+#taskList .form-check-input {
+    float: left;
+}
+
+#taskList label {
+    width: 95%;
+    float: left;
+    margin-left: 5px;
+}
+/* End form styles */
+
+/* Media queries */
+@media (min-width: 992px) {
+    .input-width {
+        width: 75%;
+    }
+}
+/* End media queries */
+
+/* Begin font styles*/
+.strikethrough {
+    text-decoration: line-through;
+    color: #999;
 }

@@ -9,12 +9,26 @@
         <script src="script.js"></script>
     </head>
     <body>
-        <h1>To-do List</h1>
-        <form>
-            <input type="text" id="task" name="task" placeholder="Enter a task">
-            <input type="submit" value="Add Task">
-        </form>
-        <ul id="taskList">
-        </ul>
+        <!-- TODO: Use Bootstrap input bar-->
+        <div class="container">
+            <h1>To-do List</h1>
+            <hr>
+            <div class="input-group mb-3 input-width" id="taskEnterGroup">
+                <input type="text" class="form-control" placeholder="Enter a task" id="taskEnter" aria-label="Enter a task" aria-describedby="button-addon2">
+                <button class="btn btn-secondary" type="button" id="taskEnterButton">Add</button>
+            </div>
+            <ul id="taskList" class="list-group col-lg-9">
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" id="task1" name="task1" value="task1">
+                    <label for="task1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque soluta repudiandae maiores earum deserunt saepe quibusdam! Sed vel harum soluta eius, doloremque, ducimus dicta corrupti ratione nihil molestiae aperiam eos.</label>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" id="task2" name="task2" value="task2">
+                    <label for="task2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet sint illum debitis, ut quo dolore cumque illo hic praesentium mollitia voluptatum itaque earum vel, molestias vero minus repellat aspernatur voluptatibus?</label>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </li>
+            </ul>
+        </div>
     </body>
 </html>
