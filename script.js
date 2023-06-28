@@ -28,13 +28,33 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  // Let user press enter to add tasks
+  taskInput = document.querySelector("#taskEnter");
+  taskInput.addEventListener("keydown", function(e) {
+    if (e.keyCode === 13) {
+      addTaskButton.click();
+      addTaskButton.classList.toggle('active');
+    }
+  });
+
+  taskInput = document.querySelector("#taskEnter");
+  taskInput.addEventListener("keyup", function(e) {
+    if (e.keyCode === 13) {
+      addTaskButton.classList.toggle('active');
+    }
+  });
+
   // Delete button
   // TODO: Make the confirmation dialog prettier, using modal
+  let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
   taskList.addEventListener("click", function(e) {
     if (e.target.type === "button") {
-      if (confirm("Are you sure you want to delete this task?")) {
+      deleteModal.show();
+      let deleteButton = document.querySelector("#deleteButton");
+      deleteButton.addEventListener("click", function() {
         e.target.parentElement.remove();
-      }
+        deleteModal.hide();
+      });
     }
   });  
 });
