@@ -16,7 +16,22 @@ document.addEventListener("DOMContentLoaded", function() {
   // Toasts
   const toastLifespan = 3000;
   const toastContainer = document.querySelector('.toast-container');
+
+  // Placeholder text for empty task list
+  const emptyTaskListMessage = document.querySelector("#emptyTaskListMessage");
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      checkTaskListEmpty();
+    });
+  });
+  var config = {childList: true};
   // ------- End of variables -------
+
+
+  // ------- Initialize -------
+  // Continuously check if task list is empty
+  observer.observe(taskList, config);
+  // ------- End of initialize -------
 
   
   // ------- Define functions -------
@@ -53,6 +68,15 @@ document.addEventListener("DOMContentLoaded", function() {
         <button type="button" class="btn btn-danger show-delete-modal">Delete</button>
       </li>
     `
+  }
+
+  // Check if task list is empty and show/hide placement text
+  function checkTaskListEmpty() {
+    if (taskList.childElementCount > 0) {
+      emptyTaskListMessage.classList.add("d-none");
+    } else {
+      emptyTaskListMessage.classList.remove("d-none");
+    }
   }
   // ------- End of functions -------
 
@@ -107,5 +131,8 @@ document.addEventListener("DOMContentLoaded", function() {
   toastContainer.addEventListener('hidden.bs.toast', function (e) {
     e.target.remove();
   });
+
+  // Check if task list is empty
+
   // ------- End of event listeners -------  
 });
