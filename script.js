@@ -1,60 +1,103 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // Checkbox strikethrough toggle
-  let taskList = document.querySelector("#taskList");
-  taskList.addEventListener("click", function(e) {
-    if (e.target.type === "checkbox") {
-      let label = document.querySelector(`label[for=${e.target.id}]`);
-      label.classList.toggle("strikethrough");
-    }
-  });
+  // ------- Define variables -------
+  // Buttons
+  const addTaskButton = document.querySelector("#taskInputButton");
+  const deleteButton = document.querySelector("#deleteButton");
 
-  // Add tasks
-  let i = document.querySelectorAll("#taskList li").length + 1;
-  let addTaskButton = document.querySelector("#taskEnterButton");
+  // Task-related
+  const taskInput = document.querySelector("#taskInput");
+  const taskList = document.querySelector("#taskList");
+  let taskCount = 0;
+  var taskItem;
+
+  // Modals
+  const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+  // Toasts
+  const toastLifespan = 3000;
+  const toastContainer = document.querySelector('.toast-container');
+  // ------- End of variables -------
+
+  
+  // ------- Define functions -------
+  // Create a new toast
+  function createToast(action) {
+    if (action === "add") {
+      var phrase = "Task successfully added!";
+    } else if (action === "delete") {
+      var phrase = "Task successfully deleted!";
+    }
+    toastContainer.innerHTML += `
+      <div class="toast hide bg-green" role="alert">
+        <div class="d-flex">
+          <div class="toast-body">
+            ${phrase}
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    `
+    return new bootstrap.Toast(document.querySelector('.toast:last-child'), {
+      autohide: true,
+      delay: toastLifespan
+    });
+  }
+  // ------- End of functions -------
+
+
+  // ------- Event listeners -------
+  // Add a new task
   addTaskButton.addEventListener("click", function() {
-    let taskInput = this.parentElement.querySelector("input");
-    taskValue = taskInput.value;
-    if (taskValue) {
-      newId = `task${i++}`;
-      let taskList = document.querySelector("#taskList");
+    if (taskInput.value) {
+      let newId = `task${taskCount++}`;
       taskList.innerHTML += `
       <li class="list-group-item">
         <input class="form-check-input me-1" type="checkbox" id="${newId}" name="${newId}" value="${newId}">
-        <label for="${newId}">${taskValue}</label>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <label for="${newId}">${taskInput.value}</label>
+        <button type="button" class="btn btn-danger show-delete-modal">Delete</button>
       </li>
       `
       taskInput.value = "";
+      taskInput.focus();
+
+      addToast.show();
     }
   });
 
   // Let user press enter to add tasks
-  taskInput = document.querySelector("#taskEnter");
   taskInput.addEventListener("keydown", function(e) {
     if (e.keyCode === 13) {
       addTaskButton.click();
-      addTaskButton.classList.toggle('active');
+      addTaskButton.classList.add('active');
     }
   });
 
-  taskInput = document.querySelector("#taskEnter");
   taskInput.addEventListener("keyup", function(e) {
     if (e.keyCode === 13) {
-      addTaskButton.classList.toggle('active');
+      addTaskButton.classList.remove('active');
+    }
+  });
+
+  // Strikethrough checked tasks
+  taskList.addEventListener("click", function(e) {
+    if (e.target.type === "checkbox") {
+      document.querySelector(`label[for=${e.target.id}]`).classList.toggle("strikethrough");
     }
   });
 
   // Delete button
-  // TODO: Make the confirmation dialog prettier, using modal
-  let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
   taskList.addEventListener("click", function(e) {
-    if (e.target.type === "button") {
+    if (e.target.type === "button" && e.target.classList.contains("show-delete-modal")) {
       deleteModal.show();
-      let deleteButton = document.querySelector("#deleteButton");
-      deleteButton.addEventListener("click", function() {
-        e.target.parentElement.remove();
-        deleteModal.hide();
-      });
+      taskItem = e.target.parentElement;
     }
-  });  
+  });
+
+  deleteButton.addEventListener("click", function() {
+    deleteModal.hide();
+    taskItem.remove();
+
+    createToast("delete").show()
+  });
+  // ------- End of event listeners -------  
 });

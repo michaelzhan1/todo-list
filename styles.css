@@ -41,10 +41,20 @@ h1 {
         width: 75%;
     }
 }
+
+@media (max-width: 768px) {
+    #taskList label {
+        width: 90%;
+    }
+}
 /* End media queries */
 
 /* Begin font styles*/
 .strikethrough {
     text-decoration: line-through;
     color: #999;
+}
+
+.bg-green {
+    background-color: #3cc351;
 }
