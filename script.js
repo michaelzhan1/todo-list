@@ -42,6 +42,18 @@ document.addEventListener("DOMContentLoaded", function() {
       delay: toastLifespan
     });
   }
+
+  // Add a new task
+  function addTask(value) {
+    let newId = `task${taskCount++}`;
+    taskList.innerHTML += `
+      <li class="list-group-item">
+        <input class="form-check-input me-1" type="checkbox" id="${newId}" name="${newId}" value="${newId}">
+        <label for="${newId}">${value}</label>
+        <button type="button" class="btn btn-danger show-delete-modal">Delete</button>
+      </li>
+    `
+  }
   // ------- End of functions -------
 
 
@@ -49,18 +61,10 @@ document.addEventListener("DOMContentLoaded", function() {
   // Add a new task
   addTaskButton.addEventListener("click", function() {
     if (taskInput.value) {
-      let newId = `task${taskCount++}`;
-      taskList.innerHTML += `
-      <li class="list-group-item">
-        <input class="form-check-input me-1" type="checkbox" id="${newId}" name="${newId}" value="${newId}">
-        <label for="${newId}">${taskInput.value}</label>
-        <button type="button" class="btn btn-danger show-delete-modal">Delete</button>
-      </li>
-      `
+      addTask(taskInput.value);
       taskInput.value = "";
       taskInput.focus();
-
-      addToast.show();
+      createToast("add").show()
     }
   });
 
@@ -96,8 +100,12 @@ document.addEventListener("DOMContentLoaded", function() {
   deleteButton.addEventListener("click", function() {
     deleteModal.hide();
     taskItem.remove();
-
     createToast("delete").show()
+  });
+
+  // Remove finished toasts
+  toastContainer.addEventListener('hidden.bs.toast', function (e) {
+    e.target.remove();
   });
   // ------- End of event listeners -------  
 });
