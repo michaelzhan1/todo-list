@@ -40,14 +40,21 @@ function createTaskElement(value, id) {
   label.setAttribute("for", id);
   label.innerHTML = escapeHtml(value);
 
-  let button = document.createElement("button");
-  button.classList.add("btn", "btn-danger", "show-delete-modal", "float-end");
-  button.setAttribute("type", "button");
-  button.textContent = "Delete";
+  let deleteButton = document.createElement("button");
+  deleteButton.classList.add("btn", "btn-danger", "show-delete-modal", "float-end");
+  deleteButton.setAttribute("type", "button");
+  deleteButton.textContent = "Delete";
+
+  let editButton = document.createElement("button");
+  editButton.classList.add("btn", "btn-secondary", "show-edit-modal", "me-1", "float-end");
+  editButton.setAttribute("type", "button");
+  editButton.textContent = "Edit";
 
   listItem.appendChild(checkbox);
   listItem.appendChild(label);
-  listItem.appendChild(button);
+  listItem.appendChild(deleteButton);
+  listItem.appendChild(editButton);
+
   return listItem;
 }
 

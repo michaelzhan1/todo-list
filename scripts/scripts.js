@@ -11,23 +11,34 @@ document.addEventListener("DOMContentLoaded", function() {
   const deleteButton = document.querySelector("#deleteButton");
   const clearAllPromptButton = document.querySelector("#clearAllPromptButton");
   const deleteAllTasksButton = document.querySelector("#deleteAllTasksButton");
+  const saveEditButton = document.querySelector("#saveEditButton");
 
+  
   // Task-related
   const taskInput = document.querySelector("#taskInput");
   const taskList = document.querySelector("#taskList");
   var taskItem;
 
+
   // Modals
+  const editModal = new bootstrap.Modal(document.getElementById('editModal'));
   const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
   const clearAllModal = new bootstrap.Modal(document.getElementById('clearAllModal'));
+
+
+  // Edit body
+  const editBody = document.querySelector("#editBody");
+
 
   // Toasts
   const toastLifespan = 3000;
   const toastContainer = document.querySelector('.toast-container');
 
+
   // Placeholder text for empty task list
   const emptyTaskListMessage = document.querySelector("#emptyTaskListMessage");
   
+
   // Mutation observer
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
@@ -61,15 +72,18 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
+
   // Add a new task
   function addTask(value) {
     taskList.appendChild(createTaskElement(value));
   }
 
+
   // Delete a task
   function deleteTask(taskItem) {
     taskItem.remove();
   }
+
 
   // Check if task list is empty and show/hide placement text
   function checkTaskListEmpty() {
@@ -81,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function() {
       clearAllPromptButton.classList.add("d-none");
     }
   }
+
 
   // Update local storage
   function updateLocalStorage() {
@@ -107,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+
   // Let user press enter to add tasks
   taskInput.addEventListener("keydown", function(e) {
     if (e.keyCode === 13) {
@@ -121,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+
   // Strikethrough checked tasks
   taskList.addEventListener("click", function(e) {
     if (e.target.type === "checkbox") {
@@ -128,19 +145,38 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Delete button
+
+  // Task buttons (edit and delete)
   taskList.addEventListener("click", function(e) {
-    if (e.target.type === "button" && e.target.classList.contains("show-delete-modal")) {
-      deleteModal.show();
+    if (e.target.type === "button") {
       taskItem = e.target.parentElement;
+
+      if (e.target.classList.contains("show-delete-modal")) {
+        deleteModal.show();
+      }
+      if (e.target.classList.contains("show-edit-modal")) {
+        editBody.value = taskItem.querySelector("label").textContent;
+        editModal.show();
+      }
     }
   });
 
+
+  // Perform deletion
   deleteButton.addEventListener("click", function() {
     deleteModal.hide();
     deleteTask(taskItem);
     createToast("delete").show()
   });
+
+
+  // Save edit
+  saveEditButton.addEventListener("click", function() {
+    editModal.hide();
+    taskItem.querySelector("label").textContent = editBody.value;
+    updateLocalStorage();
+  });
+
 
   // Delete all tasks button
   clearAllPromptButton.addEventListener("click", function() {
@@ -154,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     taskCount = 0;
   });
+
 
   // Remove finished toasts
   toastContainer.addEventListener('hidden.bs.toast', function (e) {
