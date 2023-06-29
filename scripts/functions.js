@@ -50,3 +50,29 @@ function createTaskElement(value, id) {
   listItem.appendChild(button);
   return listItem;
 }
+
+
+// Create a new toast
+function createToastElement(phrase) {
+  let newToast = document.createElement("div");
+  newToast.classList.add("toast", "hide", "bg-green");
+  newToast.setAttribute("role", "alert");
+
+  let flexDiv = document.createElement("div");
+  flexDiv.classList.add("d-flex");
+
+  let toastBody = document.createElement("div");
+  toastBody.classList.add("toast-body");
+  toastBody.textContent = phrase;
+
+  let closeButton = document.createElement("button");
+  closeButton.classList.add("btn-close", "me-2", "m-auto");
+  closeButton.setAttribute("type", "button");
+  closeButton.setAttribute("data-bs-dismiss", "toast");
+
+  flexDiv.appendChild(toastBody);
+  flexDiv.appendChild(closeButton);
+  newToast.appendChild(flexDiv);
+
+  return newToast;
+}

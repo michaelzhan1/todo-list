@@ -53,31 +53,12 @@ document.addEventListener("DOMContentLoaded", function() {
     } else if (action === "delete") {
       var phrase = "Task successfully deleted!";
     }
-    let newToast = document.createElement("div");
-    newToast.classList.add("toast", "hide", "bg-green");
-    newToast.setAttribute("role", "alert");
-
-    let flexDiv = document.createElement("div");
-    flexDiv.classList.add("d-flex");
-
-    let toastBody = document.createElement("div");
-    toastBody.classList.add("toast-body");
-    toastBody.textContent = phrase;
-
-    let closeButton = document.createElement("button");
-    closeButton.classList.add("btn-close", "me-2", "m-auto");
-    closeButton.setAttribute("type", "button");
-    closeButton.setAttribute("data-bs-dismiss", "toast");
-
-    flexDiv.appendChild(toastBody);
-    flexDiv.appendChild(closeButton);
-    newToast.appendChild(flexDiv);
+    newToast = createToastElement(phrase);
     toastContainer.appendChild(newToast);
-
     return new bootstrap.Toast(newToast, {
       autohide: true,
       delay: toastLifespan
-    })
+    });
   }
 
   // Add a new task
