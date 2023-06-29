@@ -1,17 +1,62 @@
+// Author: Michael Zhan
+// Last modified: 9/29/23
+
+
+// Global variables
+var taskCount = 0;
+
+
+// Load tasks from local storage
+window.addEventListener("load", function() {
+  var listItems = JSON.parse(localStorage.getItem("tasks")) || [];
+  taskCount = localStorage.getItem("taskCount") || 0;
+  const taskList = document.querySelector("#taskList");
+
+  listItems.forEach(function(item) {
+    let id = item.id;
+    let listItem = document.createElement("li");
+    listItem.classList.add("list-group-item");
+
+    let checkbox = document.createElement("input");
+    checkbox.classList.add("form-check-input", "me-1");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", id);
+
+    let label = document.createElement("label");
+    label.setAttribute("for", id);
+    label.textContent = item.text;
+
+    let button = document.createElement("button");
+    button.classList.add("btn", "btn-danger", "show-delete-modal");
+    button.setAttribute("type", "button");
+    button.textContent = "Delete";
+
+    listItem.appendChild(checkbox);
+    listItem.appendChild(label);
+    listItem.appendChild(button);
+    taskList.appendChild(listItem);
+  });
+});
+// End of load tasks from local storage
+
+
+// Event listeners
 document.addEventListener("DOMContentLoaded", function() {
   // ------- Define variables -------
   // Buttons
   const addTaskButton = document.querySelector("#taskInputButton");
   const deleteButton = document.querySelector("#deleteButton");
+  const clearAllPromptButton = document.querySelector("#clearAllPromptButton");
+  const deleteAllTasksButton = document.querySelector("#deleteAllTasksButton");
 
   // Task-related
   const taskInput = document.querySelector("#taskInput");
   const taskList = document.querySelector("#taskList");
-  let taskCount = 0;
   var taskItem;
 
   // Modals
   const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+  const clearAllModal = new bootstrap.Modal(document.getElementById('clearAllModal'));
 
   // Toasts
   const toastLifespan = 3000;
@@ -22,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       checkTaskListEmpty();
+      updateLocalStorage();
     });
   });
   var config = {childList: true};
@@ -64,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function() {
     toastContainer.appendChild(newToast);
 
     return new bootstrap.Toast(newToast, {
-      animation: true,
       autohide: true,
       delay: toastLifespan
     })
@@ -84,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let label = document.createElement("label");
     label.setAttribute("for", newId);
     label.innerHTML = escapeHtml(value);
-    console.log(label.textContent)
 
     let button = document.createElement("button");
     button.classList.add("btn", "btn-danger", "show-delete-modal");
@@ -95,6 +139,11 @@ document.addEventListener("DOMContentLoaded", function() {
     listItem.appendChild(label);
     listItem.appendChild(button);
     taskList.appendChild(listItem);
+  }
+
+  // Delete a task
+  function deleteTask(taskItem) {
+    taskItem.remove();
   }
 
   // Check if task list is empty and show/hide placement text
@@ -124,6 +173,18 @@ document.addEventListener("DOMContentLoaded", function() {
           return match;
       }
     });
+  }
+
+  // Update local storage
+  function updateLocalStorage() {
+    let listItems = Array.from(taskList.querySelectorAll('label')).map(function(item) {
+      return {
+        id: item.getAttribute('for'),
+        text: item.textContent
+      };
+    });
+    localStorage.setItem("tasks", JSON.stringify(listItems));
+    localStorage.setItem("taskCount", taskCount);
   }
   // ------- End of functions -------
 
@@ -170,16 +231,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
   deleteButton.addEventListener("click", function() {
     deleteModal.hide();
-    taskItem.remove();
+    deleteTask(taskItem);
     createToast("delete").show()
+  });
+
+  // Delete all tasks button
+  clearAllPromptButton.addEventListener("click", function() {
+    clearAllModal.show();
+  });
+
+  deleteAllTasksButton.addEventListener("click", function() {
+    clearAllModal.hide();
+    while (taskList.firstChild) {
+      taskList.removeChild(taskList.firstChild);
+    }
+    taskCount = 0;
   });
 
   // Remove finished toasts
   toastContainer.addEventListener('hidden.bs.toast', function (e) {
     e.target.remove();
   });
-
-  // Check if task list is empty
-
   // ------- End of event listeners -------  
 });
