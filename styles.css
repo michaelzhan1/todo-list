@@ -1,0 +1,72 @@
+/* Stylesheet for todo app */
+/* Begin general styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    background-color: #f4f4f4;
+}
+/* End general styles */
+
+/* Begin header styles */
+h1 {
+    margin-top: 15px
+}
+/* End header styles */
+
+/* Begin form styles */
+#taskList button{
+    float: right;
+}
+
+#taskList .form-check-input {
+    float: left;
+}
+
+#taskList label {
+    width: 95%;
+    float: left;
+    margin-left: 5px;
+}
+/* End form styles */
+
+/* Media queries */
+@media (min-width: 992px) {
+    .input-width {
+        width: 75%;
+    }
+}
+
+@media (max-width: 768px) {
+    #taskList label {
+        width: 90%;
+    }
+}
+/* End media queries */
+
+/* Begin font styles*/
+.strikethrough {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.bg-green {
+    background-color: #3cc351;
+}
+
+#emptyTaskListMessage {
+    background-color: #f5f5f5;
+    padding: 10px;
+    text-align: center;
+    color: #888;
+}
+
+#emptyTaskListMessage p {
+    font-size: 18px;
+    margin: 0;
+}
