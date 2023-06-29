@@ -20,14 +20,6 @@ h1 {
 /* End header styles */
 
 /* Begin form styles */
-#taskList button{
-    float: right;
-}
-
-#taskList .form-check-input {
-    float: left;
-}
-
 #taskList label {
     width: 95%;
     float: left;

@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
     listItem.classList.add("list-group-item");
 
     let checkbox = document.createElement("input");
-    checkbox.classList.add("form-check-input", "me-1");
+    checkbox.classList.add("form-check-input", "me-1", "float-start");
     checkbox.setAttribute("type", "checkbox");
     checkbox.setAttribute("id", newId);
 
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function() {
     label.innerHTML = escapeHtml(value);
 
     let button = document.createElement("button");
-    button.classList.add("btn", "btn-danger", "show-delete-modal");
+    button.classList.add("btn", "btn-danger", "show-delete-modal", "float-end");
     button.setAttribute("type", "button");
     button.textContent = "Delete";
 
