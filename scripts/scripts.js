@@ -1,43 +1,6 @@
 // Author: Michael Zhan
-// Last modified: 9/29/23
-
-
-// Global variables
-var taskCount = 0;
-
-
-// Load tasks from local storage
-window.addEventListener("load", function() {
-  var listItems = JSON.parse(localStorage.getItem("tasks")) || [];
-  taskCount = localStorage.getItem("taskCount") || 0;
-  const taskList = document.querySelector("#taskList");
-
-  listItems.forEach(function(item) {
-    let id = item.id;
-    let listItem = document.createElement("li");
-    listItem.classList.add("list-group-item");
-
-    let checkbox = document.createElement("input");
-    checkbox.classList.add("form-check-input", "me-1");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("id", id);
-
-    let label = document.createElement("label");
-    label.setAttribute("for", id);
-    label.textContent = item.text;
-
-    let button = document.createElement("button");
-    button.classList.add("btn", "btn-danger", "show-delete-modal");
-    button.setAttribute("type", "button");
-    button.textContent = "Delete";
-
-    listItem.appendChild(checkbox);
-    listItem.appendChild(label);
-    listItem.appendChild(button);
-    taskList.appendChild(listItem);
-  });
-});
-// End of load tasks from local storage
+// Last modified: 6/29/23
+// path: scripts\scripts.js
 
 
 // Event listeners
@@ -64,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Placeholder text for empty task list
   const emptyTaskListMessage = document.querySelector("#emptyTaskListMessage");
+  
+  // Mutation observer
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       checkTaskListEmpty();
@@ -117,28 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Add a new task
   function addTask(value) {
-    let newId = `task${taskCount++}`;
-    let listItem = document.createElement("li");
-    listItem.classList.add("list-group-item");
-
-    let checkbox = document.createElement("input");
-    checkbox.classList.add("form-check-input", "me-1", "float-start");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("id", newId);
-
-    let label = document.createElement("label");
-    label.setAttribute("for", newId);
-    label.innerHTML = escapeHtml(value);
-
-    let button = document.createElement("button");
-    button.classList.add("btn", "btn-danger", "show-delete-modal", "float-end");
-    button.setAttribute("type", "button");
-    button.textContent = "Delete";
-
-    listItem.appendChild(checkbox);
-    listItem.appendChild(label);
-    listItem.appendChild(button);
-    taskList.appendChild(listItem);
+    taskList.appendChild(createTaskElement(value));
   }
 
   // Delete a task
@@ -150,29 +94,11 @@ document.addEventListener("DOMContentLoaded", function() {
   function checkTaskListEmpty() {
     if (taskList.childElementCount > 0) {
       emptyTaskListMessage.classList.add("d-none");
+      clearAllPromptButton.classList.remove("d-none");
     } else {
       emptyTaskListMessage.classList.remove("d-none");
+      clearAllPromptButton.classList.add("d-none");
     }
-  }
-
-  // Replace problematic characters with HTML entities
-  function escapeHtml(input) {
-    return input.replace(/[&<>"']/g, function(match) {
-      switch (match) {
-        case '&':
-          return '&amp;';
-        case '<':
-          return '&lt;';
-        case '>':
-          return '&gt;';
-        case "'":
-          return '&#x27;';
-        case '"':
-          return '&quot;';
-        default:
-          return match;
-      }
-    });
   }
 
   // Update local storage
